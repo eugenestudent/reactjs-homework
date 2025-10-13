@@ -1,0 +1,18 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.app ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
