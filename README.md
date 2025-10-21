@@ -1,21 +1,16 @@
-**React homework 1**
+# React + Vite
 
-1. Create new repository for react homeworks with an appropriate name
-2. Create React project using Vite (select **JS** option for now, **not** TS)
-3. Remove unnecessary code
-4. Create a basic structure of your project
-5. Edit **package.json** file: add necessary information about you and your project
-6. Create a **class** component which will render an **arbitrary list of items**, run application and add **screenshot** of you rendered list to merge request
-7. Push code to your remote repository and open merge request:
-   7.1 Merge request description should include:
-    - homework number
-    - what was done (description of your changes)
-    - screenshot from option 6.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Please pay attention that for **each** homework you shell create **separate branch**.
+Currently, two official plugins are available:
 
-You can merge your code only after getting an **approval** from a mentor and resolving all the **conflicts** if they exist.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Each pull request (PR) should contain only **one commit**. If there are several commits do not forget to make **squash**.
+## React Compiler
 
-And good luck :)
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
