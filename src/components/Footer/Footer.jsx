@@ -46,7 +46,7 @@ function Footer() {
               <ul className="footer-link-list">
                 {templateLinks.map((link) => (
                   <li key={link}>
-                    <a href="#" className="footer-link">{link}</a>
+                    <a href="https://www.google.com/" className="footer-link">{link}</a>
                   </li>
                 ))}
               </ul>
