@@ -1,11 +1,16 @@
-import './styles/App.css'
-import PhoneList from './components/PhoneList'
+import Header from './components/Header/Header';
+import Hero from './components/Hero/Hero';
+import Footer from './components/Footer/Footer';
+import './App.css';
 
-export default function App() {
+function App() {
   return (
-    <div className="app">
-      <h1>React-HW-1</h1>
-      <PhoneList />
+    <div className="App">
+      <Header />
+      <Hero />
+      <Footer />
     </div>
-  )
+  );
 }
+
+export default App;
