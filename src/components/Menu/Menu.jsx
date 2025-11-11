@@ -1,12 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import Button from '../Button/Button';
 import './Menu.css';
 
 function Menu({ addToCart }) {
   const [menuItems, setMenuItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('Dessert');
   const [visibleCount, setVisibleCount] = useState(6);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const quantityRefs = useRef({});
 
   useEffect(() => {
     fetchMenuItems();
@@ -22,9 +24,11 @@ function Menu({ addToCart }) {
       }
       
       const data = await response.json();
+      setMenuItems(data);
       
       const dessertItems = data.filter(item => item.category === 'Dessert');
-      setMenuItems(dessertItems);
+      setFilteredItems(dessertItems);
+      
       setLoading(false);
     } catch (err) {
       setError(err.message);
@@ -32,21 +36,33 @@ function Menu({ addToCart }) {
     }
   };
 
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    setVisibleCount(6);
+    
+    const filtered = menuItems.filter(item => item.category === category);
+    setFilteredItems(filtered);
+  };
+
   const handleSeeMore = () => {
     setVisibleCount(prevCount => prevCount + 6);
   };
 
-  const handleAddToCart = (itemId) => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
     if (!addToCart) return;
     
-    const quantity = parseInt(quantityRefs.current[itemId]?.value || 1);
+    const formData = new FormData(event.target);
+    const quantity = parseInt(formData.get('quantity') || 1);
+    
     if (quantity > 0) {
       addToCart(quantity);
-    }
+    }  
   };
 
-  const visibleItems = menuItems.slice(0, visibleCount);
-  const hasMoreItems = visibleCount < menuItems.length;
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const hasMoreItems = visibleCount < filteredItems.length;
 
   if (loading) {
     return (
@@ -81,9 +97,30 @@ function Menu({ addToCart }) {
         </div>
 
         <div className="menu-categories">
-          <button className="category-button category-button-active">Desert</button>
-          <button className="category-button">Dinner</button>
-          <button className="category-button">Breakfast</button>
+          <Button 
+            variant="secondary" 
+            active={selectedCategory === 'Dessert'} 
+            className="category-button"
+            onClick={() => handleCategoryChange('Dessert')}
+          >
+            Dessert
+          </Button>
+          <Button 
+            variant="secondary" 
+            active={selectedCategory === 'Dinner'}
+            className="category-button"
+            onClick={() => handleCategoryChange('Dinner')}
+          >
+            Dinner
+          </Button>
+          <Button 
+            variant="secondary" 
+            active={selectedCategory === 'Breakfast'}
+            className="category-button"
+            onClick={() => handleCategoryChange('Breakfast')}
+          >
+            Breakfast
+          </Button>
         </div>
 
         <div className="menu-grid">
@@ -103,21 +140,23 @@ function Menu({ addToCart }) {
                   Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 </p>
                 
-                <div className="menu-item-actions">
+                <form className="menu-item-actions" onSubmit={handleSubmit}>
                   <input 
                     type="number" 
+                    name="quantity"
                     className="menu-item-quantity" 
                     defaultValue="1" 
                     min="1"
-                    ref={el => quantityRefs.current[item.id] = el}
+                    required
                   />
-                  <button 
+                  <Button 
+                    type="submit"
+                    variant="primary"
                     className="menu-item-add-button"
-                    onClick={() => handleAddToCart(item.id)}
                   >
                     Add to cart
-                  </button>
-                </div>
+                  </Button>
+                </form>
               </div>
             </div>
           ))}
@@ -125,9 +164,13 @@ function Menu({ addToCart }) {
 
         {hasMoreItems && (
           <div className="menu-footer">
-            <button className="menu-see-more-button" onClick={handleSeeMore}>
+            <Button 
+              variant="primary"
+              className="menu-see-more-button" 
+              onClick={handleSeeMore}
+            >
               See more
-            </button>
+            </Button>
           </div>
         )}
         
