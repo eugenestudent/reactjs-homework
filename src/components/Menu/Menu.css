@@ -108,7 +108,7 @@
   font-weight: 500;
   border: 1px solid #E5E5E5;
   border-radius: 4px;
-  background-color: #FFFFFF;
+  background-color: transparent;
   color: #546285;
   cursor: pointer;
   transition: all 0.3s ease;
