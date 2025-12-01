@@ -31,10 +31,10 @@
   color: #35B8BE;
 }
 
-.button-active {
-  background-color: #35B8BE !important;
-  color: #FFFFFF !important;
+.button-secondary.button-active {
+  color: #35B8BE;
   border-color: #35B8BE !important;
+  background-color: #FFFFFF;
 }
 
 .button:disabled {

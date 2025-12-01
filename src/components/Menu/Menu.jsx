@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import Button from '../Button/Button';
+import useFetch from '../../hooks/useFetch';
 import './Menu.css';
 
 function Menu({ addToCart }) {
+  const {loading, fetchData } = useFetch();
   const [menuItems, setMenuItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('Dessert');
   const [visibleCount, setVisibleCount] = useState(6);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchMenuItems();
@@ -16,23 +16,13 @@ function Menu({ addToCart }) {
 
   const fetchMenuItems = async () => {
     try {
-      setLoading(true);
-      const response = await fetch('https://65de35f3dccfcd562f5691bb.mockapi.io/api/v1/meals');
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch menu items');
-      }
-      
-      const data = await response.json();
+      const data = await fetchData('https://65de35f3dccfcd562f5691bb.mockapi.io/api/v1/meals');
       setMenuItems(data);
       
       const dessertItems = data.filter(item => item.category === 'Dessert');
       setFilteredItems(dessertItems);
-      
-      setLoading(false);
     } catch (err) {
-      setError(err.message);
-      setLoading(false);
+      console.error('Failed to fetch menu items:', err);
     }
   };
 
@@ -69,16 +59,6 @@ function Menu({ addToCart }) {
       <section className="menu">
         <div className="menu-container">
           <p className="menu-loading">Loading...</p>
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="menu">
-        <div className="menu-container">
-          <p className="menu-error">Error: {error}</p>
         </div>
       </section>
     );
