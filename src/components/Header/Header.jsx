@@ -1,42 +1,88 @@
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '../Button/Button';
+import { useAuth } from '../../context/AuthContext';
 import './Header.css';
 import logoSrc from '../../assets/icons/logo.svg';
 import cartSrc from '../../assets/icons/cart-icon.svg';
 
-const navigationItems = ['Home', 'Menu', 'Company', 'Login'];
+function Header({ cartCount = 0 }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { currentUser, logout } = useAuth();
 
-function Header({ cartCount = 0, onMenuClick, onHomeClick, currentPage }) {
-  const handleNavClick = (item) => {
-    if (item === 'Menu' && onMenuClick) {
-      onMenuClick();
-    } else if (item === 'Home' && onHomeClick) {
-      onHomeClick();
+  const handleNavClick = (path) => {
+    navigate(path);
+  };
+
+  const handleCartClick = () => {
+    navigate('/order');
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to logout:', error);
     }
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path;
   };
 
   return (
     <header className="header">
       <div className="header-container">
         
-        <div className="logo" onClick={onHomeClick} style={{ cursor: 'pointer' }}>
+        <div className="logo" onClick={() => handleNavClick('/')} style={{ cursor: 'pointer' }}>
           <img src={logoSrc} alt="Logo" />
         </div>
 
         <nav className="navigation">
-          {navigationItems.map((item) => (
+          <Button 
+            variant="secondary" 
+            className="nav-button"
+            onClick={() => handleNavClick('/')}
+            active={isActive('/')}
+          >
+            Home
+          </Button>
+          <Button 
+            variant="secondary" 
+            className="nav-button"
+            onClick={() => handleNavClick('/menu')}
+            active={isActive('/menu')}
+          >
+            Menu
+          </Button>
+          <Button 
+            variant="secondary" 
+            className="nav-button"
+          >
+            Company
+          </Button>
+          {currentUser ? (
             <Button 
-              key={item} 
               variant="secondary" 
               className="nav-button"
-              onClick={() => handleNavClick(item)}
-              active={(item === 'Home' && currentPage === 'home') || (item === 'Menu' && currentPage === 'menu')}
+              onClick={handleLogout}
             >
-              {item}
+              Logout
             </Button>
-          ))}
+          ) : (
+            <Button 
+              variant="secondary" 
+              className="nav-button"
+              onClick={() => handleNavClick('/login')}
+              active={isActive('/login')}
+            >
+              Login
+            </Button>
+          )}
         </nav>
 
-        <div className="cart-container">
+        <div className="cart-container" onClick={handleCartClick} style={{ cursor: 'pointer' }}>
           <div className="cart-icon">
             <img src={cartSrc} alt="Cart" className="cart-svg" />
             <span className="cart-counter">{cartCount}</span>
