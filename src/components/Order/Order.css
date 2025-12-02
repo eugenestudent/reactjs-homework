@@ -1,0 +1,32 @@
+.order-page {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5FBFC;
+  padding: 2rem;
+}
+
+.order-container {
+  background-color: #FFFFFF;
+  padding: 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.order-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #35B8BE;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.order-placeholder {
+  font-size: 1.1rem;
+  color: #546285;
+}
+

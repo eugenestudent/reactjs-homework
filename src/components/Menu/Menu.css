@@ -132,120 +132,6 @@
   margin-bottom: 3rem;
 }
 
-.menu-item {
-  display: flex;
-  gap: 1rem;
-  background-color: #FFFFFF;
-  border-radius: 4px;
-  padding: 1rem;
-  transition: all 0.3s ease;
-  border: 1px solid #F0F0F0;
-}
-
-.menu-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
-}
-
-.menu-item-image-container {
-  flex-shrink: 0;
-  width: 120px;
-  height: 120px;
-  border-radius: 4px;
-  overflow: hidden;
-  background-color: #F5FBFC;
-}
-
-.menu-item-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.menu-item-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.menu-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.menu-item-name {
-  font-size: 1rem;
-  font-weight: 400;
-  letter-spacing: 0.8px;
-  color: black;
-}
-
-.menu-item-price {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: #35B8BE;
-  white-space: nowrap;
-}
-
-.menu-item-description {
-  font-size: 0.8rem;
-  color: #546285;
-  line-height: 1.5;
-  letter-spacing: 0.4px;
-  margin: 0.5rem 3rem 1rem 0;
-}
-
-.menu-item-actions {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.menu-item-quantity {
-  width: 45px;
-  padding: 8px;
-  border: 1px solid #E5E5E5;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  text-align: center;
-  color: #08090A;
-  transition: border-color 0.3s ease;
-}
-
-.menu-item-quantity::-webkit-outer-spin-button,
-.menu-item-quantity::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.menu-item-quantity:focus {
-  outline: none;
-  border-color: #35B8BE;
-}
-
-.menu-item-add-button {
-  flex: 1;
-  padding: 0.7rem;
-  margin-right: 12.5rem;
-  background-color: #35B8BE;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.8px;
-}
-
-.menu-item-add-button:hover {
-  background-color: #2da3a9;
-  transform: translateY(-1px);
-}
-
 .menu-footer {
   display: flex;
   justify-content: center;
@@ -328,36 +214,10 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
-  .menu-item {
-    flex-direction: column;
-    padding: 1rem;
-  }
-  
-  .menu-item-image-container {
-    width: 100%;
-    height: 200px;
-  }
-  
-  .menu-item-actions {
-    flex-direction: row;
-  }
-  
-  .menu-item-quantity {
-    width: 70px;
-  }
 }
 
 @media (max-width: 480px) {
   .menu-title {
     font-size: 1.75rem;
-  }
-  
-  .menu-item-name {
-    font-size: 1.1rem;
-  }
-  
-  .menu-item-image-container {
-    height: 180px;
   }
 }

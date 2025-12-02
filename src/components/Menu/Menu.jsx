@@ -1,26 +1,32 @@
 import { useState, useEffect } from 'react';
 import Button from '../Button/Button';
+import MenuItem from '../MenuItem/MenuItem';
 import useFetch from '../../hooks/useFetch';
 import './Menu.css';
 
+const INITIAL_ITEMS_COUNT = 6;
+const ITEMS_INCREMENT = 6;
+
 function Menu({ addToCart }) {
-  const {loading, fetchData } = useFetch();
-  const [menuItems, setMenuItems] = useState([]);
+  const { loading, data: menuItems, fetchData } = useFetch();
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('Dessert');
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_ITEMS_COUNT);
 
   useEffect(() => {
     fetchMenuItems();
   }, []);
 
+  useEffect(() => {
+    if (menuItems) {
+      const dessertItems = menuItems.filter(item => item.category === 'Dessert');
+      setFilteredItems(dessertItems);
+    }
+  }, [menuItems]);
+
   const fetchMenuItems = async () => {
     try {
-      const data = await fetchData('https://65de35f3dccfcd562f5691bb.mockapi.io/api/v1/meals');
-      setMenuItems(data);
-      
-      const dessertItems = data.filter(item => item.category === 'Dessert');
-      setFilteredItems(dessertItems);
+      await fetchData('https://65de35f3dccfcd562f5691bb.mockapi.io/api/v1/meals');
     } catch (err) {
       console.error('Failed to fetch menu items:', err);
     }
@@ -28,27 +34,16 @@ function Menu({ addToCart }) {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setVisibleCount(6);
+    setVisibleCount(INITIAL_ITEMS_COUNT);
     
-    const filtered = menuItems.filter(item => item.category === category);
-    setFilteredItems(filtered);
+    if (menuItems) {
+      const filtered = menuItems.filter(item => item.category === category);
+      setFilteredItems(filtered);
+    }
   };
 
   const handleSeeMore = () => {
-    setVisibleCount(prevCount => prevCount + 6);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    
-    if (!addToCart) return;
-    
-    const formData = new FormData(event.target);
-    const quantity = parseInt(formData.get('quantity') || 1);
-    
-    if (quantity > 0) {
-      addToCart(quantity);
-    }  
+    setVisibleCount(prevCount => prevCount + ITEMS_INCREMENT);
   };
 
   const visibleItems = filteredItems.slice(0, visibleCount);
@@ -105,40 +100,11 @@ function Menu({ addToCart }) {
 
         <div className="menu-grid">
           {visibleItems.map((item) => (
-            <div key={item.id} className="menu-item">
-              <div className="menu-item-image-container">
-                <img src={item.img} alt={item.meal} className="menu-item-image" />
-              </div>
-              
-              <div className="menu-item-content">
-                <div className="menu-item-header">
-                  <h3 className="menu-item-name">{item.meal}</h3>
-                  <span className="menu-item-price">$ {item.price.toFixed(2)} USD</span>
-                </div>
-                
-                <p className="menu-item-description">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                </p>
-                
-                <form className="menu-item-actions" onSubmit={handleSubmit}>
-                  <input 
-                    type="number" 
-                    name="quantity"
-                    className="menu-item-quantity" 
-                    defaultValue="1" 
-                    min="1"
-                    required
-                  />
-                  <Button 
-                    type="submit"
-                    variant="primary"
-                    className="menu-item-add-button"
-                  >
-                    Add to cart
-                  </Button>
-                </form>
-              </div>
-            </div>
+            <MenuItem 
+              key={item.id} 
+              item={item} 
+              onAddToCart={addToCart}
+            />
           ))}
         </div>
 

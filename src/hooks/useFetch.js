@@ -2,9 +2,11 @@ import { useState } from 'react';
 
 function useFetch() {
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
 
   const fetchData = async (url, options = {}) => {
     setLoading(true);
+    setData(null);
 
     const response = await fetch(url, options);
     
@@ -24,12 +26,13 @@ function useFetch() {
       throw new Error(`HTTP Error: ${response.status}`);
     }
 
-    const data = await response.json();
+    const result = await response.json();
+    setData(result);
     setLoading(false);
-    return data;
+    return result;
   };
 
-  return { loading, fetchData };
+  return { loading, data, fetchData };
 }
 
 export default useFetch;
