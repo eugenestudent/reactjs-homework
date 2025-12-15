@@ -1,8 +1,10 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser, selectAuthLoading } from '../../store/authSlice';
 
 function ProtectedRoute({ children }) {
-  const { currentUser } = useAuth();
+  const currentUser = useSelector(selectCurrentUser);
+  const loading = useSelector(selectAuthLoading);
 
   if (!currentUser) {
     return <Navigate to="/login" replace />;

@@ -1,6 +1,7 @@
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import AuthListener from './components/AuthListener/AuthListener';
 import Header from './components/Header/Header';
 import Hero from './components/Hero/Hero';
 import Menu from './components/Menu/Menu';
@@ -11,34 +12,30 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
 
 function App() {
-  const [cartCount, setCartCount] = useState(0);
-
-  const addToCart = (quantity) => {
-    setCartCount(prevCount => prevCount + quantity);
-  };
-
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <Header cartCount={cartCount} />
-          <Routes>
-            <Route path="/" element={<Hero addToCart={addToCart} />} />
-            <Route path="/menu" element={<Menu addToCart={addToCart} />} />
-            <Route path="/login" element={<Login />} />
-            <Route 
-              path="/order" 
-              element={
-                <ProtectedRoute>
-                  <Order />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
-          <Footer />
-        </div>
-      </Router>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthListener>
+        <Router>
+          <div className="App">
+            <Header />
+            <Routes>
+              <Route path="/" element={<Hero />} />
+              <Route path="/menu" element={<Menu />} />
+              <Route path="/login" element={<Login />} />
+              <Route 
+                path="/order" 
+                element={
+                  <ProtectedRoute>
+                    <Order />
+                  </ProtectedRoute>
+                } 
+              />
+            </Routes>
+            <Footer />
+          </div>
+        </Router>
+      </AuthListener>
+    </Provider>
   );
 }
 

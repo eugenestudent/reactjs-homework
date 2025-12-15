@@ -1,53 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '../Button/Button';
 import MenuItem from '../MenuItem/MenuItem';
-import useFetch from '../../hooks/useFetch';
+import {
+  fetchMenuItems,
+  setSelectedCategory,
+  showMoreItems,
+  selectMenuLoading,
+  selectSelectedCategory,
+  selectVisibleItems,
+  selectHasMoreItems,
+} from '../../store/menuSlice';
 import './Menu.css';
 
-const INITIAL_ITEMS_COUNT = 6;
-const ITEMS_INCREMENT = 6;
-
-function Menu({ addToCart }) {
-  const { loading, data: menuItems, fetchData } = useFetch();
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('Dessert');
-  const [visibleCount, setVisibleCount] = useState(INITIAL_ITEMS_COUNT);
+function Menu() {
+  const dispatch = useDispatch();
+  const loading = useSelector(selectMenuLoading);
+  const selectedCategory = useSelector(selectSelectedCategory);
+  const visibleItems = useSelector(selectVisibleItems);
+  const hasMoreItems = useSelector(selectHasMoreItems);
 
   useEffect(() => {
-    fetchMenuItems();
-  }, []);
-
-  useEffect(() => {
-    if (menuItems) {
-      const dessertItems = menuItems.filter(item => item.category === 'Dessert');
-      setFilteredItems(dessertItems);
-    }
-  }, [menuItems]);
-
-  const fetchMenuItems = async () => {
-    try {
-      await fetchData('https://65de35f3dccfcd562f5691bb.mockapi.io/api/v1/meals');
-    } catch (err) {
-      console.error('Failed to fetch menu items:', err);
-    }
-  };
+    dispatch(fetchMenuItems());
+  }, [dispatch]);
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-    setVisibleCount(INITIAL_ITEMS_COUNT);
-    
-    if (menuItems) {
-      const filtered = menuItems.filter(item => item.category === category);
-      setFilteredItems(filtered);
-    }
+    dispatch(setSelectedCategory(category));
   };
 
   const handleSeeMore = () => {
-    setVisibleCount(prevCount => prevCount + ITEMS_INCREMENT);
+    dispatch(showMoreItems());
   };
-
-  const visibleItems = filteredItems.slice(0, visibleCount);
-  const hasMoreItems = visibleCount < filteredItems.length;
 
   if (loading) {
     return (
@@ -103,7 +86,6 @@ function Menu({ addToCart }) {
             <MenuItem 
               key={item.id} 
               item={item} 
-              onAddToCart={addToCart}
             />
           ))}
         </div>

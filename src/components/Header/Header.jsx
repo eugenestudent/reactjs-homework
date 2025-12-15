@@ -1,14 +1,18 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '../Button/Button';
-import { useAuth } from '../../context/AuthContext';
+import { selectCartItemCount } from '../../store/cartSlice';
+import { selectCurrentUser, logoutUser } from '../../store/authSlice';
 import './Header.css';
 import logoSrc from '../../assets/icons/logo.svg';
 import cartSrc from '../../assets/icons/cart-icon.svg';
 
-function Header({ cartCount = 0 }) {
+function Header() {
+  const dispatch = useDispatch();
+  const cartCount = useSelector(selectCartItemCount);
+  const currentUser = useSelector(selectCurrentUser);
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentUser, logout } = useAuth();
 
   const handleNavClick = (path) => {
     navigate(path);
@@ -18,13 +22,9 @@ function Header({ cartCount = 0 }) {
     navigate('/order');
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (error) {
-      console.error('Failed to logout:', error);
-    }
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate('/');
   };
 
   const isActive = (path) => {
