@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { loginUser, signupUser, clearError, selectAuthLoading, selectAuthError, selectCurrentUser } from '../../store/authSlice';
 import Button from '../Button/Button';
 import './Login.css';
 
@@ -8,34 +9,35 @@ function Login() {
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login, signup } = useAuth();
+  const [localError, setLocalError] = useState('');
+  
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const loading = useSelector(selectAuthLoading);
+  const authError = useSelector(selectAuthError);
+  const currentUser = useSelector(selectCurrentUser);
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/');
+    }
+  }, [currentUser, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     if (!email || !password) {
-      return setError('Please fill in all fields');
+      return setLocalError('Please fill in all fields');
     }
 
-    try {
-      setError('');
-      setLoading(true);
-      
-      if (isSignup) {
-        await signup(email, password);
-      } else {
-        await login(email, password);
-      }
-      
-      navigate('/');
-    } catch (err) {
-      setError(err.message || 'Failed to authenticate');
+    setLocalError('');
+    dispatch(clearError());
+    
+    if (isSignup) {
+      dispatch(signupUser({ email, password }));
+    } else {
+      dispatch(loginUser({ email, password }));
     }
-
-    setLoading(false);
   }
 
   const handleCancel = () => {
@@ -48,7 +50,7 @@ function Login() {
       <h1 className="login-page-title">Log In</h1>
       
       <div className="login-container">
-        {error && <div className="login-error">{error}</div>}
+        {(localError || authError) && <div className="login-error">{localError || authError}</div>}
         
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
@@ -101,7 +103,8 @@ function Login() {
             className="toggle-button"
             onClick={() => {
               setIsSignup(!isSignup);
-              setError('');
+              setLocalError('');
+              dispatch(clearError());
             }}
           >
             {isSignup ? 'Log In' : 'Sign Up'}

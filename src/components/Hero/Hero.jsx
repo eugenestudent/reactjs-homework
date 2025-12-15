@@ -1,9 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import Button from '../Button/Button';
 import './Hero.css';
 import trustpilotSrc from '../../assets/icons/hero-trustpilot.svg';
 import heroImageSrc from '../../assets/images/hero-food.png';
 
 function Hero() {
+  const navigate = useNavigate();
+
+  const handlePlaceOrder = () => {
+    navigate('/order');
+  };
+
   return (
     <section className="hero">
       <div className="hero-background-shape"></div>
@@ -19,7 +26,7 @@ function Hero() {
           Lorem Ipsum has been the industry's standard dummy text ever since the 1500.
           </p>
           
-          <Button variant="primary" className="hero-cta-button">
+          <Button variant="primary" className="hero-cta-button" onClick={handlePlaceOrder}>
             Place an Order
           </Button>
           

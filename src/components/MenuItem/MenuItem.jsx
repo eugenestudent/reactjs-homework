@@ -1,17 +1,19 @@
+import { useDispatch } from 'react-redux';
 import Button from '../Button/Button';
+import { addToCart } from '../../store/cartSlice';
 import './MenuItem.css';
 
-function MenuItem({ item, onAddToCart }) {
+function MenuItem({ item }) {
+  const dispatch = useDispatch();
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    if (!onAddToCart) return;
     
     const formData = new FormData(event.target);
     const quantity = parseInt(formData.get('quantity') || 1);
     
     if (quantity > 0) {
-      onAddToCart(quantity);
+      dispatch(addToCart({ item, quantity }));
     }
   };
 
